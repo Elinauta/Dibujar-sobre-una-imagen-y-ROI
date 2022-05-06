@@ -1,0 +1,37 @@
+import cv2
+import numpy as np
+
+#Imagen a editar
+imagen= cv2.imread(r'C:\Users\elycu\OneDrive\Escritorio\VisualStudio_Ejemplo\Practicas_Vision_7mo/Perros.jpg',cv2.IMREAD_COLOR)
+
+#GENERACION DE UNA NUEVA IMAGEN CON LA SELECCION ROI(REGION DE INTERES) DE OTRA IMAGEN
+
+#Se hace uso de la funcion selectROI :
+    #Esta funcion te enseña un recuadro para señalar el área de interes,
+    #dandote el punto de inicio y el punto final (min_x, min_y, ancho, alto)
+roi = cv2.selectROI(imagen)
+#se genera una nueva imagen usando todos los valores desde min_y:min_y+altura y min_x:min_x+ancho
+img_recorte = imagen[int(roi[1]):int(roi[1]+roi[3]), int(roi[0]):int(roi[0]+roi[2])] 
+
+
+#DIBUJAR SOBRE LA IMAGEN GENERADA DE ROI
+
+#Dibuja una linea
+cv2.line(img_recorte,(0,50),(130,200),(255,255,255),8)
+#Dibuja un rectangulo
+cv2.rectangle(img_recorte,(0,150),(250,217),(0,0,255),5)
+#Dubuja un circulo
+cv2.circle(img_recorte,(240,63), 30, (0,255,0), -1)
+#Dibuja un hexagono
+pts = np.array([[100,50],[200,50],[250,100],[200,150],[100,150],[50,100]], np.int32)
+pts = pts.reshape((-1,1,2))
+cv2.polylines(img_recorte, [pts], True, (0,255,255), 10)
+#Dibuja texto
+font = cv2.FONT_HERSHEY_SIMPLEX
+cv2.putText(img_recorte,'Practica 4',(45,200), font, 2, (100,255,155), 4, cv2.LINE_AA)
+
+
+cv2.imshow("ROI", img_recorte)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
